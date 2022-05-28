@@ -8,22 +8,30 @@ import 'package:restaurant_app/model/review.dart';
 late EndpointOption endpointOption;
 
 class RestaurantServices {
+  RestaurantServices({this.client}) {
+    client ??= http.Client();
+  }
+  http.Client? client;
+
   _setHeaders() => {'Accept': 'application/json'};
 
   Future<List<Restaurant>> getRestaurant() async {
     endpointOption = EndpointOption(url: ApiEndpoint.getRestaurants);
 
-    final response = await http.get(endpointOption.getData());
-    final data = json.decode(response.body);
-
-    if (data["restaurants"] != null) {
-      List<Restaurant> listRestaurant =
-          data["restaurants"].map<Restaurant>((json) {
-        return Restaurant.fromJson(json);
-      }).toList();
-      return listRestaurant;
+    final response = await client?.get(endpointOption.getData());
+    if (response?.statusCode == 200) {
+      final data = json.decode(response!.body);
+      if (data["restaurants"] != null) {
+        List<Restaurant> listRestaurant =
+            data["restaurants"].map<Restaurant>((json) {
+          return Restaurant.fromJson(json);
+        }).toList();
+        return listRestaurant;
+      }
+      return [];
+    } else {
+      throw Exception('Failed to load recommendation restaurants');
     }
-    return [];
   }
 
   Future<List<Restaurant>> searchRestaurant(String querys) async {
