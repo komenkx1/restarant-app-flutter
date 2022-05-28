@@ -4,12 +4,13 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:restaurant_app/components/header_component.dart';
+import 'package:restaurant_app/components/search_component.dart';
 import 'package:restaurant_app/helper/result_state.dart';
 import 'package:restaurant_app/model/restaurants.dart';
 import 'package:restaurant_app/page/setting_page.dart';
 import 'package:restaurant_app/providers/restaurant_provider.dart';
 import 'package:restaurant_app/services/restaurant_service.dart';
-import 'package:restaurant_app/theme/custom_theme.dart';
 
 class RestaurantScreen extends StatelessWidget {
   const RestaurantScreen({Key? key}) : super(key: key);
@@ -30,29 +31,11 @@ class RestaurantScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15.0),
-                              child: Text("Restaurant",
-                                  style: CustomTheme.headerTextStyle),
-                            ),
-                            Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15.0),
-                                child: IconButton(
-                                    onPressed: () =>
-                                        Get.to(const SettingPage()),
-                                    icon: const Icon(Icons.settings))),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          child: Text("Recomendation restaurant for you",
-                              style: CustomTheme.subHeaderTextStyle),
-                        ),
+                        HeaderComponent(
+                            headerText: "Restaurants",
+                            subHeaderText: "Recomendation restaurant for you",
+                            isButtonActive: true,
+                            onPressed: () => Get.to(const SettingPage())),
                         SearchComponent(
                           hint: "Search",
                           onChanged: data.search,
@@ -94,105 +77,70 @@ class ListRestaurantWidget extends StatelessWidget {
             return Container(
               margin: const EdgeInsets.symmetric(vertical: 5),
               child: ListTile(
-                trailing: FutureBuilder(
-                    future: data.checkIsFavorite(restaurant),
-                    builder: (context, snapshot) {
-                      return IconButton(
-                        onPressed: () {
-                          if (snapshot.data == true) {
-                            data.removeFavorite(restaurant.id);
-                          } else {
-                            data.addFavorite(restaurant);
-                          }
-                        },
-                        icon: Icon(snapshot.data == true
-                            ? Icons.favorite
-                            : Icons.favorite_outline),
-                      );
-                    }),
-                onTap: () async => await data.getDetail(restaurant.id),
-                title: Text(
-                  restaurant.name,
-                  style: GoogleFonts.poppins(fontWeight: FontWeight.w800),
-                ),
-                subtitle: Column(
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.pin_drop),
-                        Text(
-                          restaurant.city,
-                          style: GoogleFonts.poppins(),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      children: [
-                        Icon(Icons.star,
-                            color: data.isBusy ? Colors.grey : Colors.orange),
-                        Text(restaurant.rating.toString(),
-                            style: GoogleFonts.poppins())
-                      ],
-                    )
-                  ],
-                ),
-                leading: SizedBox(
+                  trailing: FutureBuilder(
+                      future: data.checkIsFavorite(restaurant),
+                      builder: (context, snapshot) {
+                        return IconButton(
+                          onPressed: () {
+                            if (snapshot.data == true) {
+                              data.removeFavorite(restaurant.id);
+                            } else {
+                              data.addFavorite(restaurant);
+                            }
+                          },
+                          icon: Icon(snapshot.data == true
+                              ? Icons.favorite
+                              : Icons.favorite_outline),
+                        );
+                      }),
+                  onTap: () async => await data.getDetail(restaurant.id),
+                  title: Text(
+                    restaurant.name,
+                    style: GoogleFonts.poppins(fontWeight: FontWeight.w800),
+                  ),
+                  subtitle: Column(
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.pin_drop),
+                          Text(
+                            restaurant.city,
+                            style: GoogleFonts.poppins(),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Icon(Icons.star,
+                              color: data.isBusy ? Colors.grey : Colors.orange),
+                          Text(restaurant.rating.toString(),
+                              style: GoogleFonts.poppins())
+                        ],
+                      )
+                    ],
+                  ),
+                  leading: SizedBox(
                     width: 80,
                     height: 80,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.0),
-                      child: Hero(
-                        tag: "restoThumbnail${restaurant.id}+res",
-                        child: CachedNetworkImage(
-                          fit: BoxFit.fill,
-                          imageUrl:
-                              "https://restaurant-api.dicoding.dev/images/large/" +
-                                  restaurant.pictureId,
-                          placeholder: (context, url) =>
-                              const CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              const Icon(Icons.error),
-                        ),
+                      child: CachedNetworkImage(
+                        fit: BoxFit.fill,
+                        imageUrl:
+                            "https://restaurant-api.dicoding.dev/images/large/" +
+                                restaurant.pictureId,
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
                       ),
-                    )),
-              ),
+                    ),
+                  )),
             );
           });
     });
-  }
-}
-
-class SearchComponent extends StatelessWidget {
-  const SearchComponent({Key? key, this.onChanged, this.hint})
-      : super(key: key);
-  final ValueChanged<String>? onChanged;
-  final String? hint;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 25.5),
-        child: TextField(
-            style: const TextStyle(color: Color(0xff636370)),
-            decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide:
-                      const BorderSide(color: Color(0xff282833), width: 2.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide:
-                      const BorderSide(color: Color(0xff282833), width: 2.0),
-                ),
-                hintStyle: const TextStyle(color: Color(0xff636370)),
-                hintText: hint,
-                prefixIcon: const Icon(
-                  Icons.search,
-                  color: Color(0xff636370),
-                )),
-            onChanged: onChanged));
   }
 }

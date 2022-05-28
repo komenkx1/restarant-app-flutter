@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:restaurant_app/components/header_component.dart';
+import 'package:restaurant_app/components/search_component.dart';
 import 'package:restaurant_app/helper/result_state.dart';
 import 'package:restaurant_app/model/restaurants.dart';
 import 'package:restaurant_app/providers/database_provider.dart';
-import 'package:restaurant_app/theme/custom_theme.dart';
 
 class FavoriteScreen extends StatelessWidget {
   const FavoriteScreen({Key? key}) : super(key: key);
@@ -25,15 +26,9 @@ class FavoriteScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: Text("Restaurant Favorite",
-                            style: CustomTheme.headerTextStyle),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                        child: Text("Your Favorite restaurant",
-                            style: CustomTheme.subHeaderTextStyle),
+                      const HeaderComponent(
+                        headerText: "Favorite Restaurants",
+                        subHeaderText: "Your favorite restaurant for you",
                       ),
                       SearchComponent(
                         hint: "Search",
@@ -126,37 +121,5 @@ class ListRestaurantWidget extends StatelessWidget {
             );
           });
     });
-  }
-}
-
-class SearchComponent extends StatelessWidget {
-  const SearchComponent({Key? key, this.onChanged, this.hint})
-      : super(key: key);
-  final ValueChanged<String>? onChanged;
-  final String? hint;
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 25.5),
-        child: TextField(
-            style: const TextStyle(color: Color(0xff636370)),
-            decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide:
-                      const BorderSide(color: Color(0xff282833), width: 2.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                  borderSide:
-                      const BorderSide(color: Color(0xff282833), width: 2.0),
-                ),
-                hintStyle: const TextStyle(color: Color(0xff636370)),
-                hintText: hint,
-                prefixIcon: const Icon(
-                  Icons.search,
-                  color: Color(0xff636370),
-                )),
-            onChanged: onChanged));
   }
 }
