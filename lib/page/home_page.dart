@@ -15,9 +15,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final NotificationHelper _notificationHelper = NotificationHelper();
-
+  List<Widget>? _screen;
   @override
   void initState() {
+    _screen = [
+      const RestaurantScreen(),
+      const FavoriteScreen(),
+    ];
     super.initState();
     _notificationHelper.configureSelectNotificationSubject(const DetailPage());
   }
@@ -32,13 +36,17 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Consumer<HomeProvider>(builder: (context, provider, child) {
       return Scaffold(
-        body: IndexedStack(
-          index: provider.selectedNavbar,
-          children: const [
-            RestaurantScreen(),
-            FavoriteScreen(),
-          ],
-        ),
+        //use indexedStact to kee alive the screen
+        // body: IndexedStack(
+        //   index: provider.selectedNavbar,
+        //   children: const [
+        //     RestaurantScreen(),
+        //     FavoriteScreen(),
+        //   ],
+        // ),
+
+        //use List WIdget to reload screen on change index
+        body: _screen?[provider.selectedNavbar],
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(

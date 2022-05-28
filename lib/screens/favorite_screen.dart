@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:restaurant_app/components/header_component.dart';
 import 'package:restaurant_app/components/search_component.dart';
+import 'package:restaurant_app/helper/db/database_helper.dart';
 import 'package:restaurant_app/helper/result_state.dart';
 import 'package:restaurant_app/model/restaurants.dart';
 import 'package:restaurant_app/providers/database_provider.dart';
@@ -16,38 +17,41 @@ class FavoriteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Consumer<DatabaseProvider>(builder: (context, data, _) {
-          return SmartRefresher(
-            controller: data.refreshController,
-            onRefresh: data.refresh,
-            child: SingleChildScrollView(
-              child: Container(
-                  margin: const EdgeInsets.all(15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const HeaderComponent(
-                        headerText: "Favorite Restaurants",
-                        subHeaderText: "Your favorite restaurant for you",
-                      ),
-                      SearchComponent(
-                        hint: "Search",
-                        onChanged: data.search,
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      data.state == ResultState.loading
-                          ? const Center(child: CircularProgressIndicator())
-                          : (data.state == ResultState.noData ||
-                                  data.state == ResultState.error)
-                              ? Center(child: Text(data.message))
-                              : const ListRestaurantWidget()
-                    ],
-                  )),
-            ),
-          );
-        }),
+        child: ChangeNotifierProvider(
+          create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()),
+          child: Consumer<DatabaseProvider>(builder: (context, data, _) {
+            return SmartRefresher(
+              controller: data.refreshController,
+              onRefresh: data.refresh,
+              child: SingleChildScrollView(
+                child: Container(
+                    margin: const EdgeInsets.all(15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const HeaderComponent(
+                          headerText: "Favorite Restaurants",
+                          subHeaderText: "Your favorite restaurant for you",
+                        ),
+                        SearchComponent(
+                          hint: "Search",
+                          onChanged: data.search,
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        data.state == ResultState.loading
+                            ? const Center(child: CircularProgressIndicator())
+                            : (data.state == ResultState.noData ||
+                                    data.state == ResultState.error)
+                                ? Center(child: Text(data.message))
+                                : const ListRestaurantWidget()
+                      ],
+                    )),
+              ),
+            );
+          }),
+        ),
       ),
     );
   }

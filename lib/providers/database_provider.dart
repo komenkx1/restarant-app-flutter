@@ -75,6 +75,6 @@ class DatabaseProvider extends ChangeNotifier {
   }
 
   Future getDetail(id) async {
-    Get.to(() => const DetailPage(), arguments: id);
+    Get.to(() => const DetailPage(), arguments: id)?.then((value) => refresh());
   }
 }
