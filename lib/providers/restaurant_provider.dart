@@ -5,6 +5,7 @@ import 'package:restaurant_app/helper/db/database_helper.dart';
 import 'package:restaurant_app/helper/result_state.dart';
 import 'package:restaurant_app/model/restaurants.dart';
 import 'package:restaurant_app/page/detail_page.dart';
+import 'package:restaurant_app/providers/database_provider.dart';
 import 'package:restaurant_app/providers/scheduling_provider.dart';
 import 'package:restaurant_app/services/restaurant_service.dart';
 
@@ -23,6 +24,7 @@ class RestaurantProvider extends ChangeNotifier {
   List<Restaurant> _restaurantResult = [];
   late ResultState _state;
   String _message = '';
+  DatabaseProvider? databaseProvider;
 
   String get message => _message;
   bool get isBusy => _isBusy;
@@ -96,7 +98,7 @@ class RestaurantProvider extends ChangeNotifier {
   }
 
   Future getDetail(id) async {
-    Get.to(() => const DetailPage(), arguments: id);
+    Get.to(() => const DetailPage(), arguments: id)?.then((value) => refresh());
   }
 
   addFavorite(Restaurant restaurant) async {

@@ -5,6 +5,7 @@ import 'package:restaurant_app/components/custom_dialog_form.dart';
 import 'package:restaurant_app/model/restaurants.dart';
 import 'package:restaurant_app/model/review.dart';
 import 'package:restaurant_app/page/home_page.dart';
+import 'package:restaurant_app/providers/restaurant_provider.dart';
 import 'package:restaurant_app/services/restaurant_service.dart';
 
 class RestaurantDetailProvider extends ChangeNotifier {
@@ -19,17 +20,22 @@ class RestaurantDetailProvider extends ChangeNotifier {
   Restaurant? _restaurantResult;
 
   final String _message = '';
-
+  bool _isFavorite = false;
+  RestaurantProvider? restaurantProvider;
   String get message => _message;
   bool get isBusy => _isBusy;
+  bool get isFavorite => _isFavorite;
 
   Restaurant? get result => _restaurantResult;
 
   Future getDetail() async {
+    restaurantProvider = Get.put(RestaurantProvider(apiService: apiService));
+
     try {
       _isBusy = true;
       final data = await apiService.getDetailRestaurant(id);
       _restaurantResult = data;
+      _isFavorite = await restaurantProvider!.checkIsFavorite(data);
       _isBusy = false;
       notifyListeners();
     } catch (e) {
@@ -56,6 +62,18 @@ class RestaurantDetailProvider extends ChangeNotifier {
       reviewController: reviewController,
       onConfirm: saveReview,
     ));
+  }
+
+  addfavorite(Restaurant? resto) async {
+    restaurantProvider?.addFavorite(resto!);
+    _isFavorite = await restaurantProvider!.checkIsFavorite(resto!);
+    notifyListeners();
+  }
+
+  removefavorite(Restaurant? resto) async {
+    restaurantProvider?.removeFavorite(resto!.id);
+    _isFavorite = await restaurantProvider!.checkIsFavorite(resto!);
+    notifyListeners();
   }
 
   void saveReview() async {
