@@ -39,22 +39,57 @@ class _DetailPageState extends State<DetailPage> {
                           child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10)),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    "https://restaurant-api.dicoding.dev/images/large/" +
-                                        (data.result?.pictureId ?? ''),
-                                fit: BoxFit.fill,
+                            Stack(children: [
+                              SizedBox(
+                                height: 290,
+                                width: 500,
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                  child: CachedNetworkImage(
+                                    imageUrl:
+                                        "https://restaurant-api.dicoding.dev/images/large/" +
+                                            (data.result?.pictureId ?? ''),
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
                               ),
-                            ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.only(top: 220),
+                                    child: Card(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(50),
+                                        onTap: () => {
+                                          data.isFavorite
+                                              ? data.removefavorite(data.result)
+                                              : data.addfavorite(data.result),
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(15.0),
+                                          child: Icon(
+                                            data.isFavorite
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color: Colors.grey,
+                                            size: 30,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ]),
 
                             // Text(),
-                            const SizedBox(
-                              height: 20,
-                            ),
+                            const SizedBox(height: 10),
                             Container(
                               margin:
                                   const EdgeInsets.symmetric(horizontal: 20),

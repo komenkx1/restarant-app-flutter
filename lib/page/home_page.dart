@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _notificationHelper.configureSelectNotificationSubject(DetailPage());
+    _notificationHelper.configureSelectNotificationSubject(const DetailPage());
   }
 
   @override

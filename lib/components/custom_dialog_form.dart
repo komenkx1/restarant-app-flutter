@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CustomFormDialog extends StatelessWidget {
-  CustomFormDialog(
+  const CustomFormDialog(
       {Key? key,
       required this.namaPelangganController,
       required this.reviewController,
@@ -10,7 +10,7 @@ class CustomFormDialog extends StatelessWidget {
 
   final TextEditingController namaPelangganController;
   final TextEditingController reviewController;
-  Function()? onConfirm;
+  final Function()? onConfirm;
 
   @override
   Widget build(BuildContext context) {

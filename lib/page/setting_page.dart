@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:restaurant_app/components/header_component.dart';
 import 'package:restaurant_app/providers/scheduling_provider.dart';
-import 'package:restaurant_app/theme/custom_theme.dart';
 
 class SettingPage extends StatelessWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -20,14 +20,9 @@ class SettingPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Text("Setting", style: CustomTheme.headerTextStyle),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Text("Ubah Pengaturan Disini",
-                      style: CustomTheme.subHeaderTextStyle),
+                const HeaderComponent(
+                  headerText: "Setting Page",
+                  subHeaderText: "Setiing up your app",
                 ),
                 const Divider(),
                 Card(
