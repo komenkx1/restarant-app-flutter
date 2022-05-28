@@ -41,7 +41,7 @@ class _DetailPageState extends State<DetailPage> {
                           children: <Widget>[
                             Align(
                               alignment: AlignmentDirectional.topCenter,
-                              child: Container(
+                              child: SizedBox(
                                 height: 330,
                                 child: Stack(fit: StackFit.expand, children: [
                                   ClipRRect(
@@ -58,7 +58,7 @@ class _DetailPageState extends State<DetailPage> {
                                   Align(
                                     alignment: AlignmentDirectional.bottomEnd,
                                     child: Container(
-                                      margin: EdgeInsets.symmetric(
+                                      margin: const EdgeInsets.symmetric(
                                           horizontal: 15, vertical: 15),
                                       child: Card(
                                         shape: RoundedRectangleBorder(

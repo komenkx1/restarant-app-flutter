@@ -18,8 +18,8 @@ class FavoriteScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: ChangeNotifierProvider(
-          create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()),
-          child: Consumer<DatabaseProvider>(builder: (context, data, _) {
+          create: (_) => FavoriteProvider(databaseHelper: DatabaseHelper()),
+          child: Consumer<FavoriteProvider>(builder: (context, data, _) {
             return SmartRefresher(
               controller: data.refreshController,
               onRefresh: data.refresh,
@@ -64,7 +64,7 @@ class ListRestaurantWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<DatabaseProvider>(builder: (context, data, _) {
+    return Consumer<FavoriteProvider>(builder: (context, data, _) {
       return ListView.builder(
           physics: const ClampingScrollPhysics(),
           shrinkWrap: true,

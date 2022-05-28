@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
           create: (_) => HomeProvider(),
         ),
         ChangeNotifierProvider(
-          create: (_) => DatabaseProvider(databaseHelper: DatabaseHelper()),
+          create: (_) => FavoriteProvider(databaseHelper: DatabaseHelper()),
         ),
         ChangeNotifierProvider<SchedulingProvider>(
           create: (_) => SchedulingProvider(),

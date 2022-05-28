@@ -6,12 +6,12 @@ import 'package:restaurant_app/helper/result_state.dart';
 import 'package:restaurant_app/model/restaurants.dart';
 import 'package:restaurant_app/page/detail_page.dart';
 
-class DatabaseProvider extends ChangeNotifier {
+class FavoriteProvider extends ChangeNotifier {
   final DatabaseHelper databaseHelper;
   RefreshController refreshController =
       RefreshController(initialRefresh: false);
 
-  DatabaseProvider({required this.databaseHelper}) {
+  FavoriteProvider({required this.databaseHelper}) {
     getFavorites();
   }
 

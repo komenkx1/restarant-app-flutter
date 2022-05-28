@@ -24,7 +24,7 @@ class RestaurantProvider extends ChangeNotifier {
   List<Restaurant> _restaurantResult = [];
   late ResultState _state;
   String _message = '';
-  DatabaseProvider? databaseProvider;
+  FavoriteProvider? databaseProvider;
 
   String get message => _message;
   bool get isBusy => _isBusy;
